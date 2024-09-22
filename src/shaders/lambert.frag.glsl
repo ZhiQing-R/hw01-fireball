@@ -23,6 +23,10 @@ uniform float u_VoronoiScale;
 
 uniform float u_Detail;
 
+uniform vec4 u_InnerCol;
+
+uniform vec4 u_OuterCol;
+
 // These are the interpolated values out of the rasterizer, so you can't know
 // their specific values without knowing the vertices that contributed to them
 in vec4 fs_Nor;
@@ -109,8 +113,8 @@ void main()
 {
     // Material base color (before shading)
         vec4 diffuseColor = u_Color;
-        vec3 red = vec3(1,0,0);
-        vec3 yellow = vec3(1,1,0.3);
+        vec3 red = u_InnerCol.xyz;
+        vec3 yellow = u_OuterCol.xyz;
 
         float freq = 0.8f;
         vec3 timeOffset = u_Speed * vec3(0.003f * u_Time);

@@ -105,6 +105,16 @@ class ShaderProgram {
     }
   }
 
+  setVec4(name: string, value: vec4) {
+
+    var location;
+    location = gl.getUniformLocation(this.prog, name);
+    this.use();
+    if (location !== -1) {
+      gl.uniform4fv(location, value);
+    }
+  }
+
   draw(d: Drawable) {
     this.use();
 

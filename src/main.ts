@@ -14,6 +14,8 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 const controls = {
   tesselations: 5,
   color: [255, 0, 0],
+  innerColor: [30, 115, 180],
+  outerColor: [155, 255, 240],
   fireFreq: 0.8,
   speed: 1.0,
   detail: 1.0,
@@ -44,6 +46,8 @@ function resetScene()
   controls.speed = 1.0;
   controls.detail = 1.0;
   controls.voronoiScale = 1.0;
+  controls.innerColor = [30, 115, 180];
+  controls.outerColor = [155, 255, 240];
   time = 0;
 }
 
@@ -65,7 +69,9 @@ function main() {
   gui.add(controls, 'voronoiScale', 0, 5).step(0.1).listen();
   gui.add(controls, 'Load Scene');
   gui.add(controls, 'Reset Scene');
-  gui.addColor(controls, 'color');
+  // gui.addColor(controls, 'color');
+  gui.addColor(controls, 'innerColor');
+  gui.addColor(controls, 'outerColor');
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -112,11 +118,27 @@ function main() {
       1.0
   ]);
 
+  const inCol = new Float32Array([
+    controls.innerColor[0] / 255.0,
+    controls.innerColor[1] / 255.0,
+    controls.innerColor[2] / 255.0,
+    1.0
+]);
+
+const outCol = new Float32Array([
+  controls.outerColor[0] / 255.0,
+  controls.outerColor[1] / 255.0,
+  controls.outerColor[2] / 255.0,
+  1.0
+]);
+
     lambert.setTime(time);
     lambert.setFloat('u_Freq', controls.fireFreq);
     lambert.setFloat('u_Speed', controls.speed);
     lambert.setFloat('u_Detail', controls.detail);
     lambert.setFloat('u_VoronoiScale', controls.voronoiScale);
+    lambert.setVec4('u_InnerCol', inCol);
+    lambert.setVec4('u_OuterCol', outCol);
 
     renderer.render(camera, lambert, [
       icosphere,
