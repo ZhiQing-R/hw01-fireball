@@ -112,6 +112,7 @@ vec2 voronoi( in vec2 x )
 void main()
 {
     // Material base color (before shading)
+        float alpha = mix(1.f, 0.5f, fs_Pos.y - 0.1f);
         vec4 diffuseColor = u_Color;
         vec3 red = u_InnerCol.xyz;
         vec3 yellow = u_OuterCol.xyz;
@@ -146,5 +147,5 @@ void main()
         color = mix(color, yellow, details);
 
         // Compute final shaded color
-        out_Col = vec4(color * lightIntensity, diffuseColor.a);
+        out_Col = vec4(color * lightIntensity, alpha);
 }
