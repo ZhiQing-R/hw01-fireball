@@ -14,14 +14,18 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 const controls = {
   tesselations: 5,
   color: [255, 0, 0],
-  innerColor: [30, 115, 180],
-  outerColor: [155, 255, 240],
+  innerColor: [225, 150, 85],
+  outerColor: [22, 36, 45],
+  backgroundColor: [9, 27, 27],
   fireFreq: 0.8,
   speed: 1.0,
   detail: 1.0,
   voronoiScale: 1.0,
   'Load Scene': loadScene, // A function pointer, essentially
   'Reset Scene': resetScene,
+  'Ghost Fire': GhostFire,
+  'Cherry': CherryFire,
+  'Evening': EveningFire,
 };
 
 let icosphere: Icosphere;
@@ -46,9 +50,29 @@ function resetScene()
   controls.speed = 1.0;
   controls.detail = 1.0;
   controls.voronoiScale = 1.0;
+  EveningFire();
+  time = 0;
+}
+
+function GhostFire()
+{
   controls.innerColor = [30, 115, 180];
   controls.outerColor = [155, 255, 240];
-  time = 0;
+  controls.backgroundColor = [4,27,36];
+}
+
+function CherryFire()
+{
+  controls.innerColor = [255, 95, 95];
+  controls.outerColor = [240, 160, 123];
+  controls.backgroundColor = [250, 160, 160];
+}
+
+function EveningFire()
+{
+  controls.innerColor = [225, 150, 85];
+  controls.outerColor = [22, 36, 45];
+  controls.backgroundColor = [9, 27, 27];
 }
 
 function main() {
@@ -69,9 +93,13 @@ function main() {
   gui.add(controls, 'voronoiScale', 0, 5).step(0.1).listen();
   gui.add(controls, 'Load Scene');
   gui.add(controls, 'Reset Scene');
+  gui.add(controls, 'Ghost Fire');
+  gui.add(controls, 'Cherry');
+  gui.add(controls, 'Evening');
   // gui.addColor(controls, 'color');
-  gui.addColor(controls, 'innerColor');
-  gui.addColor(controls, 'outerColor');
+  gui.addColor(controls, 'innerColor').listen();
+  gui.addColor(controls, 'outerColor').listen();
+  gui.addColor(controls, 'backgroundColor').listen();
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -133,6 +161,16 @@ const outCol = new Float32Array([
   controls.outerColor[2] / 255.0,
   1.0
 ]);
+
+const bgCol = new Float32Array([
+  controls.backgroundColor[0] / 255.0,
+  controls.backgroundColor[1] / 255.0,
+  controls.backgroundColor[2] / 255.0,
+  1.0
+]);
+
+renderer.setClearColor(bgCol[0], bgCol[1], bgCol[2], bgCol[3]);
+
 
     lambert.setTime(time);
     lambert.setFloat('u_Freq', controls.fireFreq);

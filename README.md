@@ -16,3 +16,7 @@
 - Detail: scale of surface color pattern.
 - Voronoi scale: Scale of bottom pattern.
 - Inner color & Outer color: Color of the fire.
+- Many interesting themes:
+  - Ghost
+  - Cherry
+  - Evening
